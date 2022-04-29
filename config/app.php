@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://vegefoods.local'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY','base64:0EVcHyER294HjVGNu+CKr7Zdz2eeUhSTrH8LadavRRI'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -195,6 +195,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * Custom Service Providers...
+         * */
+        App\Modules\ServiceProvider::class,
     ],
 
     /*
@@ -207,8 +211,9 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-
+    //May config
     'aliases' => Facade::defaultAliases()->merge([
+
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
