@@ -13,7 +13,7 @@ class Category extends Controller {
     public function index() {
         $categories = Category_Model::select('*')
             ->orderBy('id','desc')
-            ->paginate(10);
+            ->paginate(1);
         return view("Dashboard::components.category.index",[
             'categories' => $categories,
         ]);
@@ -56,6 +56,7 @@ class Category extends Controller {
         $category->slug = $slug;
         if($category->save()) {
             request()->session()->flash('success', 'Update success category.');
+            return back();
         } else {
             request()->session()->flash('error', 'Please try again!');
         }
@@ -69,5 +70,26 @@ class Category extends Controller {
             request()->session()->flash('error', 'Please try again!');
         }
         return redirect()->route('category.index');
+    }
+    // Tìm kiếm thể loại
+    public function search(Request $request) {
+        if($request->get('keyword')) {
+            $ouput = '';
+            $query = $request->get('keyword');
+            $keyword = Category_Model::where('name','like',"%{$query}%")
+                ->get();
+            // if ($keyword) {
+            //     foreach ($keyword as $key => $val) {
+            //         $output .= '<tr>
+            //         <td>' . $val->id . '</td>
+            //         <td>' . $val->name . '</td>
+            //         <td>' . date_format($val->created_at, 'd F Y') . '</td>
+            //         <td>' . date_format($val->updated_at, 'd F Y') . '</td>
+            //         <td>Paid</td>
+            //         </tr>';
+            //     }
+            // }
+            return response()->json($output);
+        }
     }
 }

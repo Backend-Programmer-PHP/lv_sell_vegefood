@@ -49,7 +49,7 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    <input type="text" class="form-control" placeholder="Search category">
+                    <input type="text" class="form-control" id="search" name="keyword" placeholder="Search category">
                 </div>
             </div>
             <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -126,9 +126,17 @@
                                         <a class="dropdown-item rounded-top" href="#"><span
                                                 class="fas fa-eye me-2"></span>View
                                             Details</a>
-                                        <a class="dropdown-item" href="{{route('category.edit',$category->slug)}}"><span class="fas fa-edit me-2"></span>Edit</a>
-                                        <a class="dropdown-item text-danger rounded-bottom" href="{{route('category.delete',$category->id)}}"><span
-                                                class="fas fa-trash-alt me-2"></span>Remove</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('category.edit', $category->slug) }}"><span
+                                                class="fas fa-edit me-2"></span>Edit</a>
+                                        <form method="POST" action="{{ route('category.delete', $category->id) }}">
+                                            @csrf
+                                            <button class="dropdown-item text-danger rounded-bottom dltBtn"
+                                                data-id={{ $category->id }} data-toggle="tooltip" data-placement="bottom">
+                                                <span class="fas fa-trash-alt me-2"></span>
+                                                Remove
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
@@ -144,6 +152,7 @@
             $pagePrevious = $categories->currentPage() - 1;
             $pageNext = $categories->currentPage() + 1;
             $total_pages = ceil($categories->total() / $categories->perPage());
+            // dd($total_pages);
         @endphp
         <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
             <nav aria-label="Page navigation example">
@@ -176,18 +185,74 @@
                 </ul>
 
             </nav>
-            <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
+
+            <div class="fw-normal small mt-4 mt-lg-0">Showing <b>{{$categories->perPage()}}</b> out of <b>{{$categories->total()}}</b> entries</div>
         </div>
     </div>
 @endsection
 @push('scripts')
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script>
+        // Ẩn hiện thông báo
         $(document).ready(function() {
             $("button").click(function() {
                 $(".alert.alert-danger.alert-dismissable.fade.show").remove();
                 $(".alert.alert-success.alert-dismissable.fade.show").remove();
             });
-        })
+        });
+        // Modal Xóa thể loại
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.dltBtn').click(function(e) {
+                var form = $(this).closest('form');
+                var dataID = $(this).data('id');
+                // alert(dataID);
+                e.preventDefault();
+                swal({
+                        title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover this data!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            form.submit();
+                        } else {
+                            swal("Your data is safe!");
+                        }
+                    });
+            })
+        });
+    </script>
+    <script type="text/javascript">
+        // Tìm kiểm thể loại xử lý ajax
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                var value = $(this).val();
+                if (value != '') {
+                    var _token = $('input[name="csrf-token"]').val();
+                    $.ajax({
+                        method:"POST",
+                        url: '{{ route('category.search') }}',
+                        data:{
+                            keyword: value,
+                            _token: _token
+                        },
+                        success: function(data) {
+                            $('tbody').html(data);
+                        }
+                    });
+                }
+
+            });
+
+        });
     </script>
 @endpush

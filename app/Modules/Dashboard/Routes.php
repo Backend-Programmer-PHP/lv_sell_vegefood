@@ -10,11 +10,12 @@ Route::group(['module' => 'Dashboard', 'middleware' => 'web', 'namespace' => "Ap
     });
     Route::group(["prefix" => "categories"], function() {
         Route::get('/', 'Category@index')->name('category.index');
+        Route::post('/search', 'Category@search')->name('category.search');
         Route::get('/add', 'Category@create')->name('category.add');
         Route::get('/edit/{slug}', 'Category@edit')->name('category.edit');
         Route::post('/store', 'Category@store')->name('category.store');
         Route::post('/update/{id}', 'Category@update')->name('category.update');
-        Route::get('/delete/{id}', 'Category@delete')->name('category.delete');
+        Route::post('/delete/{id}', 'Category@delete')->name('category.delete');
     });
 
 });

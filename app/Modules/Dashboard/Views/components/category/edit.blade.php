@@ -33,9 +33,9 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <!-- Form -->
+                @if($category)
                 <form action="{{route('category.update',$category->id)}}" method="POST" class="navbar-search form-inline" id="navbar-search-main">
                     @csrf
-                    @if($category)
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-lg-4 col-sm-6">
@@ -55,8 +55,9 @@
                             Update
                         </button>
                     </div>
-                    @endif
+
                 </form>
+                @endif
                 <!-- End of Form -->
             </div>
         </div>
