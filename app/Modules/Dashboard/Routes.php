@@ -7,10 +7,19 @@ Route::group(['module' => 'Dashboard', 'middleware' => 'web', 'namespace' => "Ap
     Route::get('dashboard', 'Dashboard@index')->name('dashboard');
     Route::group(["prefix" => "products"], function() {
         Route::get('/', 'Product@index')->name('product.index');
+        Route::get('/add', 'Product@create')->name('product.create');
+        Route::get('/trash', 'Product@trash')->name('product.trash');
+        Route::get('/search', 'Product@search')->name('product.search');
+        Route::get('/edit/{slug}', 'Product@edit')->name('product.edit');
+        Route::post('/store', 'Product@store')->name('product.store');
+        Route::post('/update/{slug}', 'Product@update')->name('product.update');
+        Route::post('/delete/{slug}', 'Product@delete')->name('product.delete');
+        Route::post('/trash/{slug}', 'Product@moveTrash')->name('product.move');
+        Route::post('/rehibilitate/{slug}','Product@rehibilitate')->name('product.rehibilitate');
     });
     Route::group(["prefix" => "categories"], function() {
         Route::get('/', 'Category@index')->name('category.index');
-        Route::post('/search', 'Category@search')->name('category.search');
+        Route::get('/search', 'Category@search')->name('category.search');
         Route::get('/add', 'Category@create')->name('category.add');
         Route::get('/edit/{slug}', 'Category@edit')->name('category.edit');
         Route::post('/store', 'Category@store')->name('category.store');

@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', true),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -185,7 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -214,7 +214,8 @@ return [
     //May config
     'aliases' => Facade::defaultAliases()->merge([
 
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+     //for resize image
+     'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
 ];

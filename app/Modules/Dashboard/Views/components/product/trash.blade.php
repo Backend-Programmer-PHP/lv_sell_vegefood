@@ -18,23 +18,23 @@
                     <li class="breadcrumb-item active" aria-current="page">Components</li>
                 </ol>
             </nav>
-            <h2 class="h4">All Products</h2>
+            <h2 class="h4">Trash basket</h2>
             {{-- <p class="mb-0">Your web analytics dashboard template.</p> --}}
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <a href="{{ route('product.create') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                    </path>
-                </svg>
-                New Product
+            <a href="{{ route('product.index') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                <i class="fas fa-backspace me-2"></i>
+                Back
             </a>
 
             <div class="btn-group ms-2 ms-lg-3">
-                <a href="{{ route('product.trash') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                    <i class="fas fa-trash me-2"></i>
-                    Trash basket
+                <a href="{{ route('product.create') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                        </path>
+                    </svg>
+                    New Product
                 </a>
             </div>
         </div>
@@ -43,19 +43,7 @@
     <div class="table-settings mb-4">
         <div class="row align-items-center justify-content-between">
             <div class="col col-md-6 col-lg-3 col-xl-4">
-                <div class="input-group me-2 me-lg-3 fmxw-400">
-                    <span class="input-group-text">
-                        <svg class="icon icon-xs" x-description="Heroicon name: solid/search"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </span>
-                    <form id="idForm" action="{{ route('product.search') }}" method="get">
-                        <input type="text" class="form-control" name="keyword" placeholder="Search product">
-                    </form>
-                </div>
+
             </div>
             <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
                 <div class="dropdown">
@@ -99,7 +87,7 @@
                     <th class="border-gray-200">Action</th>
                 </tr>
             </thead>
-            @if (!empty($products))
+            @if ($products)
                 <tbody>
                     <!-- Item -->
                     @foreach ($products as $product)
@@ -141,18 +129,24 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="#"><span
-                                                class="fas fa-eye me-2"></span>View
-                                            Details</a>
-                                        <a class="dropdown-item"
+                                        <form method="POST" action="{{ route('product.rehibilitate', $product->slug) }}">
+                                            @csrf
+                                            <button class="dropdown-item text-danger rounded-bottom btnRestore"
+                                                data-id={{ $product->slug }} data-toggle="tooltip"
+                                                data-placement="bottom">
+                                                <i class="fas fa-trash-restore-alt me-2"></i>
+                                                Restore
+                                            </button>
+                                        </form>
+                                        {{-- <a class="dropdown-item"
                                             href="{{ route('product.edit', $product->slug) }}"><span
-                                                class="fas fa-edit me-2"></span>Edit</a>
-                                        <form method="POST" action="{{ route('product.move', $product->slug) }}">
+                                                class="fas fa-edit me-2"></span>Edit</a> --}}
+                                        <form method="POST" action="{{ route('product.delete', $product->slug) }}">
                                             @csrf
                                             <button class="dropdown-item text-danger rounded-bottom dltBtn"
                                                 data-id={{ $product->slug }} data-toggle="tooltip"
                                                 data-placement="bottom">
-                                                <span class="fas fa-trash-alt me-2"></span>
+                                                <i class="fas fa-trash-alt me-2"></i>
                                                 Remove
                                             </button>
                                         </form>
@@ -164,7 +158,7 @@
                 </tbody>
             @else
                 <tbody>
-                    <h2>Empty</h2>
+                    <h2>Empty trash cans</h2>
                 </tbody>
             @endif
         </table>
@@ -251,7 +245,7 @@
                 e.preventDefault();
                 swal({
                         title: "Are you sure?",
-                        text: "When selecting a product, it will be deleted in the trash!",
+                        text: "Once deleted, you will not be able to recover this data!",
                         icon: "warning",
                         buttons: true,
                         dangerMode: true,
@@ -260,27 +254,29 @@
                         if (willDelete) {
                             form.submit();
                         } else {
-                            swal("The product has been placed in the trash!");
+                            swal("Your data is safe!");
                         }
                     });
-            })
-        });
-    </script>
-    <script type="text/javascript">
-        // Tìm kiểm thể loại xử lý ajax
-        $(document).ready(function() {
-            $("#idForm2").submit(function(e) {
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-                var form = $(this);
-                var actionUrl = form.attr('action');
-                $.ajax({
-                    type: "POST",
-                    url: actionUrl,
-                    data: form.serialize(), // serializes the form's elements.
-                    success: function(data) {
-                        $('.table').html(data);
-                    }
-                });
+            });
+            $('.btnRestore').click(function(e) {
+                var form = $(this).closest('form');
+                var dataID = $(this).data('id');
+                // alert(dataID);
+                e.preventDefault();
+                swal({
+                        title: "Are you sure?",
+                        text: "When you choose, you get your product back!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            form.submit();
+                        } else {
+                            swal("Data has been recovered!");
+                        }
+                    });
             });
         });
     </script>

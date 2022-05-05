@@ -49,7 +49,10 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    <input type="text" class="form-control" id="search" name="keyword" placeholder="Search category">
+                    <form id="idForm" action="{{ route('category.search') }}" method="get">
+                        @csrf
+                        <input type="text" class="form-control" name="keyword" placeholder="Search category">
+                    </form>
                 </div>
             </div>
             <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -66,13 +69,15 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
                         <span class="small ps-3 fw-bold text-dark">Show</span>
-                        <a class="dropdown-item d-flex align-items-center fw-bold" href="#">10 <svg
-                                class="icon icon-xxs ms-auto" fill="currentColor" viewBox="0 0 20 20"
+                        <a class="dropdown-item d-flex align-items-center fw-bold" href="#">10
+                            <svg class="icon icon-xxs ms-auto" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
                                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg></a>
+                                    clip-rule="evenodd">
+                                </path>
+                            </svg>
+                        </a>
                         <a class="dropdown-item fw-bold" href="#">20</a>
                         <a class="dropdown-item fw-bold rounded-bottom" href="#">30</a>
                     </div>
@@ -186,10 +191,23 @@
 
             </nav>
 
-            <div class="fw-normal small mt-4 mt-lg-0">Showing <b>{{$categories->perPage()}}</b> out of <b>{{$categories->total()}}</b> entries</div>
+            <div class="fw-normal small mt-4 mt-lg-0">Showing <b>{{ $categories->perPage() }}</b> out of
+                <b>{{ $categories->total() }}</b> entries
+            </div>
         </div>
     </div>
 @endsection
+@push('styles')
+    <style>
+        button.close {
+            border-radius: 50px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 5px;
+        }
+    </style>
+@endpush
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -234,25 +252,19 @@
     <script type="text/javascript">
         // Tìm kiểm thể loại xử lý ajax
         $(document).ready(function() {
-            $('#search').on('keyup', function() {
-                var value = $(this).val();
-                if (value != '') {
-                    var _token = $('input[name="csrf-token"]').val();
-                    $.ajax({
-                        method:"POST",
-                        url: '{{ route('category.search') }}',
-                        data:{
-                            keyword: value,
-                            _token: _token
-                        },
-                        success: function(data) {
-                            $('tbody').html(data);
-                        }
-                    });
-                }
-
+            $("#idForm2").submit(function(e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+                var form = $(this);
+                var actionUrl = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function(data) {
+                        $('tbody').html(data);
+                    }
+                });
             });
-
         });
     </script>
 @endpush

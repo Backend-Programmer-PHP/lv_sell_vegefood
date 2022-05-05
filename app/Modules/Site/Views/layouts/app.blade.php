@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@include('Site::partials._head');
+@include('Site::partials._head')
 
 <body>
     <div id="app">
+        {{-- Config --}}
+        @include('Site::partials._config')
         {{-- Nav --}}
-        @include('Site::partials._nav');
+        @include('Site::partials._nav')
         @show
         <main class="py-4">
             @yield('content')
@@ -14,7 +16,7 @@
     </div>
 
     {{-- Footer --}}
-    @include('Site::partials._footer');
+    @include('Site::partials._footer')
 </body>
 
 </html>

@@ -4,7 +4,7 @@ namespace App\Modules\Dashboard\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +26,13 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'photo' => 'nullable',
+            'description' => 'nullable',
+            'price' => 'required',
+            'discount' => 'nullable',
+            'quantity' => 'required',
+            'mass' => 'required',
+            'category' => 'required',
+            'protype' => 'required'
         ];
     }
 }

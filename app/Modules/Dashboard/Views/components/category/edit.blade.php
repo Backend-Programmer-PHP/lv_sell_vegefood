@@ -33,33 +33,64 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <!-- Form -->
-                @if($category)
-                <form action="{{route('category.update',$category->id)}}" method="POST" class="navbar-search form-inline" id="navbar-search-main">
-                    @csrf
-                    <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="mb-4">
-                                    <label for="usernameValidate">Category Name</label>
-                                    <input type="text" name="name" value="{{$category->name}}" class="form-control @error('name') is-invalid @enderror" id="usernameValidate" placeholder="Enter category">
-                                    @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
+                @if ($category)
+                    <form action="{{ route('category.update', $category->id) }}" method="POST"
+                        class="navbar-search form-inline" id="navbar-search-main" enctype="multipart/form-data">
+                        @csrf
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="mb-4">
+                                        <label for="usernameValidate">Category Name</label>
+                                        <input type="text" name="name" value="{{ $category->name }}"
+                                            class="form-control @error('name') is-invalid @enderror" id="usernameValidate"
+                                            placeholder="Enter category">
+                                        @error('name')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="formFile" class="form-label">Choose image</label>
+                                        <input class="form-control" type="file" value="{{ $category->photo }}"
+                                            name="photo" id="formFile">
+                                    </div>
+                                    @error('photo')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
+                                    <div class="mb-3">
+                                        @if ($category->photo)
+                                            <img src="{{ $category->photo }}" width="50" height="50"
+                                                alt="{{ $category->name }}" multiple="multiple" class="img-fuild">
+                                        @else
+                                            <img src="https://yotrip.vn/public/backend/assets/images/pattern.png" width="50"
+                                                height="50" alt="{{ $category->name }}" class="img-fuild">
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-
+                            <button type="submit" class="btn btn-primary d-inline-flex align-items-center">
+                                Update
+                            </button>
                         </div>
-                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center">
-                            Update
-                        </button>
-                    </div>
 
-                </form>
+                    </form>
                 @endif
                 <!-- End of Form -->
             </div>
         </div>
     </div>
 @endsection
+@push('styles')
+    <style>
+        .img-fuild {
+            border: 1px solid gray;
+            border-radius: 10px;
+        }
+    </style>
+@endpush

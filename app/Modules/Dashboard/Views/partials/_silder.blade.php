@@ -41,7 +41,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- Avatar -->
-                                        <img alt="Image placeholder" src="../../assets/img/team/profile-picture-1.jpg"
+                                        <img alt="Image placeholder" src="{{asset('public/dashboard/assets/img/team/profile-picture-1.jpg')}}"
                                             class="avatar-md rounded">
                                     </div>
                                     <div class="col ps-0 ms-2">
@@ -62,7 +62,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- Avatar -->
-                                        <img alt="Image placeholder" src="../../assets/img/team/profile-picture-2.jpg"
+                                        <img alt="Image placeholder" src="{{asset('public/dashboard/assets/img/team/profile-picture-2.jpg')}}"
                                             class="avatar-md rounded">
                                     </div>
                                     <div class="col ps-0 ms-2">
@@ -83,7 +83,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- Avatar -->
-                                        <img alt="Image placeholder" src="../../assets/img/team/profile-picture-3.jpg"
+                                        <img alt="Image placeholder" src="{{asset('public/dashboard/assets/img/team/profile-picture-3.jpg')}}"
                                             class="avatar-md rounded">
                                     </div>
                                     <div class="col ps-0 m-2">
@@ -104,7 +104,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- Avatar -->
-                                        <img alt="Image placeholder" src="../../assets/img/team/profile-picture-4.jpg"
+                                        <img alt="Image placeholder" src="{{asset('public/dashboard/assets/img/team/profile-picture-4.jpg')}}"
                                             class="avatar-md rounded">
                                     </div>
                                     <div class="col ps-0 ms-2">
@@ -125,7 +125,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <!-- Avatar -->
-                                        <img alt="Image placeholder" src="../../assets/img/team/profile-picture-5.jpg"
+                                        <img alt="Image placeholder" src="{{asset('public/dashboard/assets/img/team/profile-picture-5.jpg')}}"
                                             class="avatar-md rounded">
                                     </div>
                                     <div class="col ps-0 ms-2">

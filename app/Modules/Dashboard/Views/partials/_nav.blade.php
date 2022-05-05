@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link" href="../../pages/tables/bootstrap-tables.html">
+                            <a class="nav-link" href="{{route('product.create')}}">
                                 <span class="sidebar-text">Add Product</span>
                             </a>
                         </li>

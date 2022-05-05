@@ -33,7 +33,7 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <!-- Form -->
-                <form action="{{route('category.store')}}" method="POST" class="navbar-search form-inline" id="navbar-search-main">
+                <form action="{{route('category.store')}}" method="POST" class="navbar-search form-inline" id="navbar-search-main" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="row mb-4">
@@ -49,7 +49,17 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Choose image</label>
+                                    <input class="form-control" type="file" name="photo" id="formFile">
+                                </div>
+                                @error('photo')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary d-inline-flex align-items-center">
                             Add

@@ -7,13 +7,14 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Modules\Dashboard\Models\Category_Model;
 use App\Modules\Dashboard\Requests\CategoryRequest;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class Category extends Controller {
 
     public function index() {
         $categories = Category_Model::select('*')
             ->orderBy('id','desc')
-            ->paginate(1);
+            ->paginate(10);
         return view("Dashboard::components.category.index",[
             'categories' => $categories,
         ]);
@@ -38,6 +39,20 @@ class Category extends Controller {
         }
         //Reassign the slug to $data
         $category->slug = $slug;
+        if($request->hasFile('photo')) {
+            $file = $request->photo;
+            $file_name = Str::slug($file->getClientOriginalName(), "-"). "-" . time() . "." . $file->getClientOriginalExtension();
+            //resize file befor to upload large
+            if($file->getClientOriginalExtension() != "svg") {
+                $image_resize = Image::make($file->getRealPath());
+                $image_resize->save('public/dashboard/uploads/categories/thumb/' . $file_name);
+            }
+            //close upload image
+            $file->move("public/dashboard/uploads/categories/large", $file_name);
+            //save db
+            $url = "http://vegefoods.local/public/dashboard/uploads/categories/thumb/";
+            $category->photo = $url. $file_name;
+        }
         if($category->save()) {
             request()->session()->flash('success', 'Add success category.');
         } else {
@@ -54,9 +69,22 @@ class Category extends Controller {
             $slug = $slug . '-' . date('ymdis') . '-' . rand(0, 999);
         }
         $category->slug = $slug;
+        if($request->hasFile('photo')) {
+            $file = $request->photo;
+            $file_name = Str::slug($file->getClientOriginalName(), "-"). "-" . time() . "." . $file->getClientOriginalExtension();
+            //resize file befor to upload large
+            if($file->getClientOriginalExtension() != "svg") {
+                $image_resize = Image::make($file->getRealPath());
+                $image_resize->save('public/dashboard/uploads/categories/thumb/' . $file_name);
+            }
+            //close upload image
+            $file->move("public/dashboard/uploads/categories/large", $file_name);
+            //save db
+            $url = "http://vegefoods.local/public/dashboard/uploads/categories/thumb/";
+            $category->photo = $url. $file_name;
+        }
         if($category->save()) {
             request()->session()->flash('success', 'Update success category.');
-            return back();
         } else {
             request()->session()->flash('error', 'Please try again!');
         }
@@ -71,25 +99,17 @@ class Category extends Controller {
         }
         return redirect()->route('category.index');
     }
-    // Tìm kiếm thể loại
+    // Genre Search
     public function search(Request $request) {
-        if($request->get('keyword')) {
-            $ouput = '';
-            $query = $request->get('keyword');
-            $keyword = Category_Model::where('name','like',"%{$query}%")
-                ->get();
-            // if ($keyword) {
-            //     foreach ($keyword as $key => $val) {
-            //         $output .= '<tr>
-            //         <td>' . $val->id . '</td>
-            //         <td>' . $val->name . '</td>
-            //         <td>' . date_format($val->created_at, 'd F Y') . '</td>
-            //         <td>' . date_format($val->updated_at, 'd F Y') . '</td>
-            //         <td>Paid</td>
-            //         </tr>';
-            //     }
-            // }
-            return response()->json($output);
+        $categories = Category_Model::where('name','like',"%{$request->keyword}%")
+            ->paginate(1);
+        if($categories) {
+            request()->session()->flash('success', 'Search for a successful genre!');
+        } else {
+            request()->session()->flash('error', 'Please try again!');
         }
+        return view('Dashboard::components.category.index',[
+            'categories' => $categories
+        ]);
     }
 }
