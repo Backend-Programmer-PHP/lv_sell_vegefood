@@ -1,7 +1,6 @@
 <?php
 //Site routes
 use Illuminate\Support\Facades\Route;
-
 Route::group(['module' => 'Site', 'middleware' => 'web', 'namespace' => "App\Modules\Site\Controllers"], function() {
 
     Route::get('/', 'Site@index')->name('home');
@@ -14,4 +13,5 @@ Route::group(['module' => 'Site', 'middleware' => 'web', 'namespace' => "App\Mod
         // POST
         Route::post('/signup/act', 'User@signUpSubmit')->name('signup');
     });
+
 });

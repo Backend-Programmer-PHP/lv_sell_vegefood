@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Modules\Site\Requests\UserRequest;
 use App\Modules\Site\Models\User_Model;
@@ -36,8 +37,15 @@ class User extends Controller {
         $user->password = Hash::make($request->password);
         $user->status = $request->status ? 'active' : 'inactive';
         if($user->save()) {
-
-            request()->session()->flash('success', 'Add success category.');
+            $email = $request->email;
+            Mail::send('Site::email.verify', [
+                'email' => $email,
+            ], function ($message) use ($email) {
+                $message->from('ngoctam2303001@gmail.com', 'Vegefoods');
+                $message->to($email);
+                $message->subject('Successful account registration');
+            });
+            request()->session()->flash('success', 'Add success category - Please check your email.!');
         } else {
             request()->session()->flash('error', 'Please try again!');
         }

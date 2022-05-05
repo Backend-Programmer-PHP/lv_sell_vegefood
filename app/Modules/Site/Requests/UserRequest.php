@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'photo' => 'nullable',
-            'email' => 'string|required|unique:users,email',
+            'email' => 'required|email|max:50|unique:users',
             'password' => 'required|min:6',
             'confirm_password' => 'required|same:password',
             'remember_token' => '',
