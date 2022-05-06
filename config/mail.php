@@ -40,8 +40,8 @@ return [
             'host' => env('MAIL_HOST', 'smtp.gmail.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('phantinh1209@gmail.com'),
-            'password' => env('inhoazlvlrblkrml'),
+            'username' => env('MAIL_USERNAME','phantinh1209@gmail.com'),
+            'password' => env('MAIL_PASSWORD',"inhoazlvlrblkrml"),
             'timeout' => null,
         ],
 
@@ -92,8 +92,8 @@ return [
     */
 
    'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@womentech.finance'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'ngoctam2303001@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Vegefoods'),
     ],
 
     /*

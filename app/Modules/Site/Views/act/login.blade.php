@@ -14,13 +14,14 @@
                 </a>
             </p>
             <div class="row justify-content-center form-bg-image"
-                data-background-lg="{{asset('public/dashboard/assets/img/illustrations/signin.svg')}}">
+                data-background-lg="{{ asset('public/dashboard/assets/img/illustrations/signin.svg') }}">
                 <div class="col-12 d-flex align-items-center justify-content-center">
                     <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                         <div class="text-center text-md-center mb-4 mt-md-0">
                             <h1 class="mb-0 h3">Sign in to our platform</h1>
                         </div>
-                        <form action="#" class="mt-4">
+                        <form action="{{ route('post.signin') }}" class="mt-4" method="POST">
+                            @csrf
                             <!-- Form -->
                             <div class="form-group mb-4">
                                 <label for="email">Your Email</label>
@@ -34,8 +35,13 @@
                                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                                         </svg>
                                     </span>
-                                    <input type="email" class="form-control" placeholder="example@company.com" id="email"
-                                        autofocus required>
+                                    <input type="email" name="email" class="form-control"
+                                        placeholder="example@company.com" id="email" autofocus required>
+                                    @error('email')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                             <!-- End of Form -->
@@ -52,28 +58,35 @@
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         </span>
-                                        <input type="password" placeholder="Password" class="form-control" id="password"
-                                            required>
+                                        <input type="password" name="password" placeholder="Password" class="form-control"
+                                            id="password" required>
+                                        @error('password')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <!-- End of Form -->
                                 <div class="d-flex justify-content-between align-items-top mb-4">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="remember">
+                                        <input class="form-check-input" name="remember_token"  value="{{ old('remember_token') ? 'checked' : '' }}" type="checkbox" id="remember">
                                         <label class="form-check-label mb-0" for="remember">
                                             Remember me
                                         </label>
                                     </div>
-                                    <div><a href="{{ route('forgot.password') }}" class="small text-right">Lost password?</a></div>
+                                    <div><a href="{{ route('forgot.password') }}" class="small text-right">Lost
+                                            password?</a></div>
                                 </div>
                             </div>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-gray-800">Sign in</button>
+                                <button type="submit" name="submit" class="btn btn-gray-800">Sign in</button>
                             </div>
                         </form>
                         <div class="mt-3 mb-4 text-center">
                             <span class="fw-normal">or login with</span>
                         </div>
+                        {{-- MXH --}}
                         <div class="d-flex justify-content-center my-4">
                             <a href="#" class="btn btn-icon-only btn-pill btn-outline-gray-500 me-2"
                                 aria-label="facebook button" title="facebook button">

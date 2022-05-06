@@ -213,9 +213,8 @@ return [
     */
     //May config
     'aliases' => Facade::defaultAliases()->merge([
-
-     //for resize image
-     'Image' => Intervention\Image\Facades\Image::class,
+        //for resize image
+        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
 ];

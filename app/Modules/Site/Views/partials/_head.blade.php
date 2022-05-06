@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="{{asset('public/site/css/ionicons.min.css')}}">
 
-    <link rel="stylesheet" href="{{asset('public/site/css/bootstrap-datepicker.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('public/site/css/bootstrap-datepicker.css')}}"> --}}
     <link rel="stylesheet" href="{{asset('public/site/css/jquery.timepicker.css')}}">
 
 

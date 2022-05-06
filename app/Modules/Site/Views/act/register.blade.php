@@ -20,6 +20,7 @@
                         <div class="text-center text-md-center mb-4 mt-md-0">
                             <h1 class="mb-0 h3">Create Account </h1>
                         </div>
+                        @include('Site::partials._notifications')
                         <form action="{{ route('signup') }}" class="mt-4" method="POST">
                             @csrf
                             <!-- Form -->
@@ -172,4 +173,15 @@
         </div>
     </section>
 @endsection
+@push('styles')
+    <style>
+        .alert.alert-success.alert-dismissable.fade.show {
+            font-size: 14px;
+        }
+        button.close {
+            border: 1px solid;
+            border-radius: 50px;
+        }
 
+    </style>
+@endpush

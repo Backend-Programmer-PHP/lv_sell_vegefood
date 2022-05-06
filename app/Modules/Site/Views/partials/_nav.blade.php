@@ -15,26 +15,48 @@
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                         <a class="dropdown-item" href="shop.html">Shop</a>
                         <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-                        <a class="dropdown-item" href="product-single.html">Single Product</a>
-                        <a class="dropdown-item" href="cart.html">Cart</a>
-                        <a class="dropdown-item" href="checkout.html">Checkout</a>
                     </div>
                 </li>
-                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Contact & Support</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown04">
+                        <a class="dropdown-item" href="shop.html">About</a>
+                        <a class="dropdown-item" href="wishlist.html">Contact</a>
+
+                    </div>
+                </li>
                 <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                <li class="nav-item">
-                    <a href="{{ route('login') }}" class="nav-link">
-                        Login
-                    </a>
-                </li>
-                <li class="nav-item cta-colored active">
-                    <a href="{{ route('register') }}" class="nav-link">
-                        Register
-                    </a>
-                </li>
+                @if (Auth::user())
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04">
+                            <a class="dropdown-item" href="{{ route('profile', Auth::user()->slug) }}">Profile</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                class="d-none">
+                                @csrf
+                            </form>
+
+
+                        </div>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link">
+                            Login
+                        </a>
+                    </li>
+                    <li class="nav-item cta-colored active">
+                        <a href="{{ route('register') }}" class="nav-link">
+                            Register
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-                    class="icon-shopping_cart"></span>[0]</a></li>
+                            class="icon-shopping_cart"></span>[0]</a></li>
             </ul>
         </div>
     </div>
