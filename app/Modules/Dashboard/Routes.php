@@ -26,5 +26,12 @@ Route::group(['module' => 'Dashboard', 'middleware' => 'web', 'namespace' => "Ap
         Route::post('/update/{id}', 'Category@update')->name('category.update');
         Route::post('/delete/{id}', 'Category@delete')->name('category.delete');
     });
-
+    Route::group(["prefix" => "banners"], function() {
+        Route::get('/', 'Banner@index')->name('banner.index');
+        Route::get('/add', 'Banner@create')->name('banner.create');
+        Route::get('/edit/{slug}', 'Banner@edit')->name('banner.edit');
+        Route::post('/store', 'Banner@store')->name('banner.store');
+        Route::post('/update/{slug}', 'Banner@update')->name('banner.update');
+        Route::post('/delete/{slug}', 'Banner@delete')->name('banner.delete');
+    });
 });

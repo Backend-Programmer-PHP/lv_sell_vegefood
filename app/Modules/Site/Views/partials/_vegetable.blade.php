@@ -13,37 +13,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-                            style="background-image: url({{ asset('public/site/images/category-1.jpg') }});">
-                            <div class="text px-3 py-1">
-                                <h2 class="mb-0"><a href="#">Fruits</a></h2>
-                            </div>
-                        </div>
-                        <div class="category-wrap ftco-animate img d-flex align-items-end"
-                            style="background-image: url({{ asset('public/site/images/category-2.jpg') }});">
-                            <div class="text px-3 py-1">
-                                <h2 class="mb-0"><a href="#">Vegetables</a></h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    @if ($categoryDesc)
+                        <div class="col-md-6">
+                            @foreach ($categoryDesc as $category)
+                                <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
+                                    style="background-image: url({{ $category->photo }});">
+                                    <div class="text px-3 py-1">
+                                        <h2 class="mb-0"><a href="{{ route('product.category', $category->slug) }}">{{ $category->name }}</a></h2>
+                                    </div>
+                                </div>
+                            @endforeach
 
-            <div class="col-md-4">
-                <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-                    style="background-image: url({{ asset('public/site/images/category-3.jpg') }});">
-                    <div class="text px-3 py-1">
-                        <h2 class="mb-0"><a href="#">Juices</a></h2>
-                    </div>
-                </div>
-                <div class="category-wrap ftco-animate img d-flex align-items-end"
-                    style="background-image: url({{ asset('public/site/images/category-4.jpg') }});">
-                    <div class="text px-3 py-1">
-                        <h2 class="mb-0"><a href="#">Dried</a></h2>
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </div>
+            @if ($categoryAsc)
+            <div class="col-md-4">
+                @foreach ($categoryAsc as $category)
+                <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
+                    style="background-image: url({{ $category->photo }});">
+                    <div class="text px-3 py-1">
+                        <h2 class="mb-0"><a href="{{ route('product.category', $category->slug) }}">{{ $category->name }}</a></h2>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @endif
         </div>
     </div>
 </section>

@@ -40,7 +40,7 @@
                     <span class="sidebar-icon">
                         <img src="{{asset('public/dashboard/assets/img/brand/light.svg')}}" height="20" width="20" alt="Volt Logo">
                     </span>
-                    <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
+                    <span class="mt-1 ms-1 sidebar-text">Vegefoods Overview</span>
                 </a>
             </li>
             <li class="nav-item  active ">
@@ -151,11 +151,16 @@
                     <ul class="flex-column nav">
                         <li class="nav-item">
                             <a class="nav-link"
-                                href="{{route('category.index')}}">
+                                href="{{ route('category.index') }}">
                                 <span class="sidebar-text">Categories</span>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('banner.index') }}">
+                                <span class="sidebar-text">Banners</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
