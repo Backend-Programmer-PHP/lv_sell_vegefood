@@ -25,7 +25,7 @@
                         @endphp
                         <div class="col-md-6 col-lg-3 ftco-animate">
                             <div class="product">
-                                <a href="#" class="img-prod"><img class="img-fluid" src="{{ $product->photo }}"
+                                <a href="{{ route('product.detail', $product->slug) }}" class="img-prod"><img class="img-fluid" src="{{ $product->photo }}"
                                         alt="Colorlib Template">
                                     @if ($product->discount > 0)
                                         <span class="status">{{ $product->discount }}%</span>
@@ -33,7 +33,7 @@
                                     <div class="overlay"></div>
                                 </a>
                                 <div class="text py-3 pb-4 px-3 text-center">
-                                    <h3><a href="#">{{ $product->name }}</a></h3>
+                                    <h3><a href="{{ route('product.detail', $product->slug) }}">{{ $product->name }}</a></h3>
                                     <div class="d-flex">
                                         <div class="pricing">
                                             <p class="price">
@@ -59,16 +59,18 @@
                                             <form action="{{ route('product.favorite.add', $product->id) }}"
                                                 method="post">
                                                 @csrf
-                                                @if(App\Modules\Site\Helpers\Helper::checkFavorte($product->id) == 0)
-                                                <button type="submit"
-                                                    class="style-custom heart d-flex justify-content-center align-items-center">
-                                                    <span><i class="ion-ios-heart"></i></span>
-                                                </button>
-                                                @else
-                                                <button type="submit"
-                                                    class="style-custom heart d-flex justify-content-center align-items-center">
-                                                    <span><i class="ion-ios-trash"></i></span>
-                                                </button>
+                                                @if (Auth::user())
+                                                    @if (App\Modules\Site\Helpers\Helper::checkFavorte($product->id) == 0)
+                                                        <button type="submit"
+                                                            class="style-custom heart d-flex justify-content-center align-items-center">
+                                                            <span><i class="ion-ios-heart"></i></span>
+                                                        </button>
+                                                    @else
+                                                        <button type="submit"
+                                                            class="style-custom heart d-flex justify-content-center align-items-center">
+                                                            <span><i class="ion-ios-trash"></i></span>
+                                                        </button>
+                                                    @endif
                                                 @endif
                                             </form>
                                         </div>

@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center">
                 <div class="col-md-9 ftco-animate text-center">
-                    <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span>
+                    <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('home') }}">Home</a></span>
                         <span>Cart</span>
                     </p>
                     <h1 class="mb-0 bread">My Cart</h1>
@@ -14,6 +14,7 @@
     </div>
     <section class="ftco-section ftco-cart">
         <div class="container">
+            @include('Site::partials._notifications')
             <div class="row">
                 <div class="col-md-12 ftco-animate">
                     <div class="cart-list">
@@ -28,57 +29,48 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="text-center">
-                                    <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+                            @if ($carts->isNotEmpty())
+                                <tbody>
+                                    <form action="{{ route('cart.update') }}" method="post">
+                                        @csrf
+                                        @foreach ($carts as $cart)
+                                            <tr class="text-center">
+                                                <td class="product-remove"><a
+                                                        href="{{ route('cart.delete', $cart->carts_id) }}"><span
+                                                            class="ion-ios-close"></span></a>
+                                                </td>
 
-                                    <td class="image-prod">
-                                        <div class="img" style="background-image:url(images/product-3.jpg);">
-                                        </div>
-                                    </td>
+                                                <td class="image-prod">
+                                                    <div class="img"
+                                                        style="background-image:url({{ $cart->photo }});">
+                                                    </div>
+                                                </td>
 
-                                    <td class="product-name">
-                                        <h3>Bell Pepper</h3>
-                                        <p>Far far away, behind the word mountains, far from the countries</p>
-                                    </td>
+                                                <td class="product-name">
+                                                    <h3>{{ $cart->name }}</h3>
+                                                    <p>{{ substr($cart->description, 0, 50) }}</p>
+                                                </td>
 
-                                    <td class="price">$4.90</td>
+                                                <td class="price">
+                                                    {{ number_format($cart->carts_price, 1, '.', '') }}K</td>
 
-                                    <td class="quantity">
-                                        <div class="input-group mb-3">
-                                            <input type="text" name="quantity" class="quantity form-control input-number"
-                                                value="1" min="1" max="100">
-                                        </div>
-                                    </td>
+                                                <td class="quantity">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" name="quantity[]"
+                                                            class="quantity form-control input-number"
+                                                            value="{{ $cart->carts_quantity }}" min="1" max="100">
+                                                        <input type="hidden" name="cartId[]" value="{{$cart->carts_id}}">
+                                                    </div>
+                                                </td>
 
-                                    <td class="total">$4.90</td>
-                                </tr><!-- END TR-->
-
-                                <tr class="text-center">
-                                    <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-
-                                    <td class="image-prod">
-                                        <div class="img" style="background-image:url(images/product-4.jpg);">
-                                        </div>
-                                    </td>
-
-                                    <td class="product-name">
-                                        <h3>Bell Pepper</h3>
-                                        <p>Far far away, behind the word mountains, far from the countries</p>
-                                    </td>
-
-                                    <td class="price">$15.70</td>
-
-                                    <td class="quantity">
-                                        <div class="input-group mb-3">
-                                            <input type="text" name="quantity" class="quantity form-control input-number"
-                                                value="1" min="1" max="100">
-                                        </div>
-                                    </td>
-
-                                    <td class="total">$15.70</td>
-                                </tr><!-- END TR-->
-                            </tbody>
+                                                <td class="total">{{ number_format($cart->amount, 1, '.', '') }}K
+                                                </td>
+                                                <input type="submit" value="submit" hidden>
+                                            </tr><!-- END TR-->
+                                        @endforeach
+                                    </form>
+                                </tbody>
+                            @endif
                         </table>
                     </div>
                 </div>
@@ -146,3 +138,25 @@
     </section>
     @include('Site::partials._subcribe')
 @endsection
+@push('styles')
+    <style>
+        button.btn-removie {
+            width: 30px;
+            font-size: 20px;
+            height: 40px !important
+        }
+
+        .load-more.mt-2 {
+            float: right;
+        }
+
+        button.close {
+            margin-top: -12px;
+            width: 30px;
+            height: 30px;
+            border: 1px solid;
+            border-radius: 50px;
+        }
+
+    </style>
+@endpush

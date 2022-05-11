@@ -10,12 +10,12 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{{ route('shop') }}" id="dropdown04" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Shop</a>
+                    <a class="nav-link dropdown-toggle" href="{{ route('shop') }}" id="dropdown04"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                         <a class="dropdown-item" href="{{ route('shop') }}">Shop</a>
-                        @if(Auth::check())
-                        <a class="dropdown-item" href="{{ route('product.favorite') }}">Favorite</a>
+                        @if (Auth::check())
+                            <a class="dropdown-item" href="{{ route('product.favorite') }}">Favorite</a>
                         @endif
                     </div>
                 </li>
@@ -36,8 +36,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
-                            @if(Auth::user()->role == 'admin')
-                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                            @if (Auth::user()->role == 'admin')
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
                             @endif
                             <a class="dropdown-item" href="{{ route('profile', Auth::user()->slug) }}">Profile</a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -62,8 +62,21 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-                            class="icon-shopping_cart"></span>[0]</a></li>
+                @if(Auth::user())
+                <li class="nav-item cta cta-colored">
+                    <a href="{{ route('cart') }}" class="nav-link">
+                        <span class="icon-shopping_cart"></span>
+                        [{{ App\Modules\Site\Helpers\Helper::countCart(); }}]
+                    </a>
+                </li>
+                @else
+                <li class="nav-item cta cta-colored">
+                    <a href="{{ route('cart') }}" class="nav-link">
+                        <span class="icon-shopping_cart"></span>
+                        [0]
+                    </a>
+                </li>
+                @endif
             </ul>
         </div>
     </div>

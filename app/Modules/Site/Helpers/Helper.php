@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Modules\Site\Models\Favorite_Model;
+use App\Modules\Site\Models\Cart_Model;
 
 class Helper extends controller {
     // Get IP
@@ -42,5 +43,12 @@ class Helper extends controller {
             'users_id' => Auth::user()->id
         ])->count();
         return $check;
+    }
+    // Count the number of products in the basket.
+    public static function countCart() {
+        $item = Cart_Model::where('orders_id', 0)
+            ->where('users_id', Auth::user()->id)
+            ->count();
+        return $item;
     }
 }

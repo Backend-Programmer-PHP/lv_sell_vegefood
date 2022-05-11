@@ -215,6 +215,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         //for resize image
         'Image' => Intervention\Image\Facades\Image::class,
+        'Hepler_Site' => App\Modules\Site\Helpers\Helper::class
     ])->toArray(),
 
 ];

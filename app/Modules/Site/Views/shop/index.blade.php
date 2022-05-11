@@ -53,23 +53,25 @@
                                                 class="style-custom add-to-cart d-flex justify-content-center align-items-center text-center">
                                                 <span><i class="ion-ios-menu"></i></span>
                                             </a>
-                                            <a href="#"
+                                            <a href="{{ route('cart.add', $product->slug) }}"
                                                 class="style-custom buy-now d-flex justify-content-center align-items-center mx-1">
                                                 <span><i class="ion-ios-cart"></i></span>
                                             </a>
                                             <form action="{{ route('product.favorite.add', $product->id) }}"
                                                 method="post">
                                                 @csrf
-                                                @if(App\Modules\Site\Helpers\Helper::checkFavorte($product->id) == 0)
-                                                <button type="submit"
-                                                    class="style-custom heart d-flex justify-content-center align-items-center">
-                                                    <span><i class="ion-ios-heart"></i></span>
-                                                </button>
-                                                @else
-                                                <button type="submit"
-                                                    class="style-custom heart d-flex justify-content-center align-items-center">
-                                                    <span><i class="ion-ios-trash"></i></span>
-                                                </button>
+                                                @if (Auth::user())
+                                                    @if (App\Modules\Site\Helpers\Helper::checkFavorte($product->id) == 0)
+                                                        <button type="submit"
+                                                            class="style-custom heart d-flex justify-content-center align-items-center">
+                                                            <span><i class="ion-ios-heart"></i></span>
+                                                        </button>
+                                                    @else
+                                                        <button type="submit"
+                                                            class="style-custom heart d-flex justify-content-center align-items-center">
+                                                            <span><i class="ion-ios-trash"></i></span>
+                                                        </button>
+                                                    @endif
                                                 @endif
                                             </form>
 
@@ -140,6 +142,7 @@
             border-radius: 50px;
             width: 25px;
         }
+
         .alert.alert-success.alert-dismissable.fade.show {
             text-align: center;
         }

@@ -41,8 +41,11 @@ Route::group(['module' => 'Site', 'middleware' => 'web', 'namespace' => "App\Mod
         Route::get('/', 'Blog@index')->name('blog');
         Route::get('/blog-single', 'Blog@getBlogSingle')->name('blog.single');
     });
-    Route::group(["prefix" => "orders"], function() {
+    Route::group(["prefix" => "orders",'middleware' => ['verify']], function() {
         Route::get('/cart', 'Order@index')->name('cart');
+        Route::get('/add/{slug}', 'Order@addToCart')->name('cart.add');
+        Route::get('/delete/{id}', 'Order@deleteToCart')->name('cart.delete');
+        Route::post('/cart/update', 'Order@updateToCart')->name('cart.update');
         Route::get('/checkout', 'Order@getCheckout')->name('checkout');
     });
 });
