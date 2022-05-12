@@ -33,41 +33,51 @@
                         <p>
                             {{ $product->description }}
                         </p>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="form-group d-flex">
-                                    <div class="select-wrap">
-                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                        <select name="" id="" class="form-control">
-                                            <option value="">Small</option>
-                                            <option value="">Medium</option>
-                                            <option value="">Large</option>
-                                            <option value="">Extra Large</option>
-                                        </select>
+                        <form action="{{ route('cart.add', $product->slug) }}" method="get">
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="" id="" class="form-control">
+                                                <option value="">Small</option>
+                                                <option value="">Medium</option>
+                                                <option value="">Large</option>
+                                                <option value="">Extra Large</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="w-100"></div>
+                                <div class="input-group col-md-6 d-flex mb-3">
+                                    <span class="input-group-btn mr-2">
+                                        <button type="button" class="quantity-left-minus btn" data-type="minus"
+                                            data-field="">
+                                            <i class="ion-ios-remove"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" id="quantity" name="quantity" class="form-control input-number"
+                                        value="1" min="1" max="100">
+                                    <span class="input-group-btn ml-2">
+                                        <button type="button" class="quantity-right-plus btn" data-type="plus"
+                                            data-field="">
+                                            <i class="ion-ios-add"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-md-12">
+                                    <p style="color: #000;">{{ $product->mass }} kg available</p>
+                                </div>
                             </div>
-                            <div class="w-100"></div>
-                            <div class="input-group col-md-6 d-flex mb-3">
-                                <span class="input-group-btn mr-2">
-                                    <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
-                                        <i class="ion-ios-remove"></i>
+                            <p>
+                                <a class="btn btn-black py-3 px-5">
+                                    <button type="submit">
+                                        Add to Cart
                                     </button>
-                                </span>
-                                <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1"
-                                    min="1" max="100">
-                                <span class="input-group-btn ml-2">
-                                    <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                                        <i class="ion-ios-add"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <div class="w-100"></div>
-                            <div class="col-md-12">
-                                <p style="color: #000;">{{ $product->mass }} kg available</p>
-                            </div>
-                        </div>
-                        <p><a href="cart.html" class="btn btn-black py-3 px-5">Add to Cart</a></p>
+                                </a>
+                            </p>
+                        </form>
                     </div>
                 @endif
             </div>
@@ -122,12 +132,11 @@
                                                 class="style-custom add-to-cart d-flex justify-content-center align-items-center text-center">
                                                 <span><i class="ion-ios-menu"></i></span>
                                             </a>
-                                            <a href="#"
+                                            <a href="{{ route('cart.add', $red->slug) }}"
                                                 class="style-custom buy-now d-flex justify-content-center align-items-center mx-1">
                                                 <span><i class="ion-ios-cart"></i></span>
                                             </a>
-                                            <form action="{{ route('product.favorite.add', $red->id) }}"
-                                                method="post">
+                                            <form action="{{ route('product.favorite.add', $red->id) }}" method="post">
                                                 @csrf
                                                 @if (Auth::user())
                                                     @if (App\Modules\Site\Helpers\Helper::checkFavorte($red->id) == 0)

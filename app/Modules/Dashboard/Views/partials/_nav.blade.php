@@ -151,14 +151,20 @@
                     <ul class="flex-column nav">
                         <li class="nav-item">
                             <a class="nav-link"
+                                href="{{ route('banner.index') }}">
+                                <span class="sidebar-text">Banners</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
                                 href="{{ route('category.index') }}">
                                 <span class="sidebar-text">Categories</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"
-                                href="{{ route('banner.index') }}">
-                                <span class="sidebar-text">Banners</span>
+                                href="{{ route('coupon.index') }}">
+                                <span class="sidebar-text">Coupons</span>
                             </a>
                         </li>
                     </ul>

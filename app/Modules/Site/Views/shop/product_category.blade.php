@@ -52,7 +52,7 @@
                                                 class="style-custom add-to-cart d-flex justify-content-center align-items-center text-center">
                                                 <span><i class="ion-ios-menu"></i></span>
                                             </a>
-                                            <a href="#"
+                                            <a href="{{ route('cart.add', $product->slug) }}"
                                                 class="style-custom buy-now d-flex justify-content-center align-items-center mx-1">
                                                 <span><i class="ion-ios-cart"></i></span>
                                             </a>

@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Modules\Site\Models\Product_Model;
 use App\Modules\Site\Models\Category_Model;
 use App\Modules\Site\Models\Cart_Model;
+use App\Modules\Site\Models\Coupon_Model;
+use App\Modules\Site\Models\City_Model;
+use App\Modules\Site\Models\Region_Model;
 
 class Order extends Controller {
     // construct
@@ -22,16 +25,16 @@ class Order extends Controller {
             ->where('users_id', Auth::user()->id)
             ->orderBy('id','DESC')
             ->get();
-        return view('Site::orders.cart')
-            ->with('carts', $carts);
-    }
-    public function getCheckout() {
-        return view('Site::orders.checkout');
+        $regions = Region_Model::select('region.id','region.title')
+            ->get();
+        return view('Site::orders.cart',[
+            'carts' => $carts,
+            'regions' => $regions,
+        ]);
     }
     // Add a product to a cart:
     public function addToCart(Request $request) {
         $quant = $request->quantity;
-
         if(!$quant) {
             $quant = 1;
         }
@@ -73,8 +76,7 @@ class Order extends Controller {
     // Delete products in carts:
     public function deleteToCart(Request $request) {
         $cart = Cart_Model::find($request->id);
-        if ($cart) {
-            $cart->delete();
+        if ($cart->delete()) {
             request()->session()->flash('success', 'Cart successfully removed');
             return back();
         }
@@ -98,6 +100,76 @@ class Order extends Controller {
             return back()->with('success', 'Cart successfully updated!');
         } else {
             return back()->with('Cart Invalid!');
+        }
+    }
+    // Apply coupon into orders
+    public function applyCouponIntoOrders(Request $request) {
+        $coupon = Coupon_Model::where('code', $request->code)
+            ->where('status','active')
+            ->where('updated_at','>=', now())
+            ->first();
+        if(!$coupon) {
+            request()->session()->flash('error', 'Invalid coupon code, Please try again');
+            return back();
+        } else {
+            $totalPrice = Cart_Model::where([
+                'users_id' => Auth::user()->id,
+                'orders_id' => 0
+            ])->sum('price');
+            session()->put('coupon', [
+                'id' => $coupon->id,
+                'code' => $coupon->code,
+                'value' => $coupon->discount($totalPrice),
+            ]);
+            request()->session()->flash('success', 'Coupon successfully applied');
+            return redirect()->back();
+        }
+    }
+    // Filter ajax province, district, ward
+    public function filterRegion(Request $request) {
+        $region_id = $request->region;
+        if($region_id) {
+            $region = City_Model::select('id','title')
+                ->where('region_id',$region_id)
+                ->get();
+            return response(['data' => $region]);
+        }
+    }
+    // Estimate shipping and tax:
+    public function estimateShippingCharges(Request $request) {
+        $region = City_Model::select('region.*','city.id as city_id','city.title as city_title')
+            ->join('region','city.region_id','region.id')
+            ->where('region.id' , $request->region)
+            ->where('city.id', $request->district)
+            ->first();
+        if(!$region) {
+            request()->session()->flash('error', 'Invalid region, Please try again');
+            return back();
+        } else {
+            switch($region->title) {
+                case 'Hồ Chí Minh':
+                    session()->put('region', [
+                        'shipping' => 10,
+                    ]);
+                    break;
+                case 'Hà Nội':
+                    session()->put('region', [
+                        'shipping' => 56,
+                    ]);
+                    break;
+                case 'Đà Nẵng':
+                    session()->put('region', [
+                        'shipping' => 47,
+                    ]);
+                    break;
+                default:
+                    session()->put('region', [
+                        'shipping' => 0,
+                    ]);
+                    break;
+            }
+            request()->session()->flash('success', 'Coupon successfully applied');
+            return redirect()->back();
         }
     }
 }

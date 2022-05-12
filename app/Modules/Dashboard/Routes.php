@@ -34,4 +34,12 @@ Route::group(['module' => 'Dashboard', 'middleware' => 'web', 'namespace' => "Ap
         Route::post('/update/{slug}', 'Banner@update')->name('banner.update');
         Route::post('/delete/{slug}', 'Banner@delete')->name('banner.delete');
     });
+    Route::group(["prefix" => "coupons"], function() {
+        Route::get('/', 'Coupon@index')->name('coupon.index');
+        Route::get('/add', 'Coupon@create')->name('coupon.create');
+        Route::get('/edit/{id}', 'Coupon@edit')->name('coupon.edit');
+        Route::post('/store', 'Coupon@store')->name('coupon.store');
+        Route::post('/update/{id}', 'Coupon@update')->name('coupon.update');
+        Route::post('/delete/{id}', 'Coupon@delete')->name('coupon.delete');
+    });
 });
