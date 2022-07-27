@@ -4,11 +4,16 @@ namespace App\Modules\Site\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Controller;
 use App\Modules\Site\Models\Region_Model;
 use App\Modules\Site\Models\Cart_Model;
 use App\Modules\Site\Models\Order_Model;
 use App\Modules\Site\Requests\CheckoutRequest;
+use App\Notifications\OffersNotification;
+use App\Mail\MailCheckout;
+use App\Models\User;
 
 class Checkout extends Controller {
     public function getCheckout() {
@@ -52,11 +57,26 @@ class Checkout extends Controller {
         } else {
             $order->status = 'cancel';
         }
-        if($order->save()) {
-            Cart_Model::where(['users_id' => auth()->user()->id, 'orders_id' => 0])
+        $order->save();
+        //dd($order->id);
+        Cart_Model::where(['users_id' => auth()->user()->id, 'orders_id' => 0])
                 ->update(['orders_id' => $order->id]);
-            request()->session()->flash('success', 'Your product successfully placed in order');
-            return back();
-        }
+        request()->session()->flash('success', 'Your product successfully placed in order');
+        $userSchema = User::find(auth()->user()->id);
+        // Mail::to($request->email)->send(new MailCheckout($order->id));
+        // Mail::to($userSchema)->send(new MailCheckout($order->id));
+        $details = [
+            'title' => 'New order created',
+            'actionURL' => route('order.show', $order->id),
+            'photo' => 'https://dietmoibachkhoa24h.com/wp-content/uploads/2020/01/cart-icon.png',
+            'content' => 'Thank you for your support.!'
+        ];
+        Notification::send($userSchema, new OffersNotification($details));
+        return back();
+    }
+    // show orders:
+    public function showCheckout($id) {
+        $order = Order_Model::findOrFail($id);
+        return view('Dashboard::components.order.show')->with('order', $order);
     }
 }

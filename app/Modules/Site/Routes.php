@@ -57,7 +57,7 @@ Route::group(['module' => 'Site', 'middleware' => 'web', 'namespace' => "App\Mod
         Route::get('/', 'Checkout@getCheckout')->name('checkout');
         Route::post('/billing', 'Checkout@postBillingOrder')->name('checkout.billing');
     });
-
+    Route::get('/send-notification', 'Announcement@sendOfferNotification');
 
 
 });
